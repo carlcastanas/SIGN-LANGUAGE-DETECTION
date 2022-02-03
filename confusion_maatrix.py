@@ -5,7 +5,7 @@ import numpy as np
 import time
 import matplotlib.pyplot as plt
 
-
+# Load the model
 def plot_confusion_matrix(cm,
                           target_names,
                           title='Confusion matrix',
@@ -43,6 +43,7 @@ def plot_confusion_matrix(cm,
     http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
 
     """
+ 
     import itertools
 
     accuracy = np.trace(cm) / float(np.sum(cm))
@@ -80,7 +81,7 @@ def plot_confusion_matrix(cm,
     plt.xlabel('Predicted label\naccuracy={:0.4f}; misclass={:0.4f}'.format(accuracy, misclass))
     plt.savefig('confusion_matrix.png')
 
-
+# 
 model = load_model('model/keypoint_classifier/keypoint_classifier_new.h5')
 pred_labels=[]
 start_time = time.time()

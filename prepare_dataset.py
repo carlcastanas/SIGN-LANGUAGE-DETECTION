@@ -3,21 +3,22 @@ import cv2 as cv
 import mediapipe as mp
 from app_files import calc_landmark_list, draw_landmarks, get_args, pre_process_landmark,logging_csv
 
+# from model import KeyPointClassifier
 def main():
     args = get_args()
-
+#    print(args)
     cap_device = args.device
     cap_width = args.width
     cap_height = args.height
-
+#   print(cap_device,cap_width,cap_height)
     use_static_image_mode = args.use_static_image_mode
     min_detection_confidence = args.min_detection_confidence
     min_tracking_confidence = args.min_tracking_confidence
-
+#  print(use_static_image_mode,min_detection_confidence,min_tracking_confidence)
     cap = cv.VideoCapture(cap_device)
     cap.set(cv.CAP_PROP_FRAME_WIDTH, cap_width)
     cap.set(cv.CAP_PROP_FRAME_HEIGHT, cap_height)
-
+#  print(cap.get(cv.CAP_PROP_FRAME_WIDTH),cap.get(cv.CAP_PROP_FRAME_HEIGHT))
     mp_hands = mp.solutions.hands
     hands = mp_hands.Hands(
         static_image_mode=use_static_image_mode,
@@ -25,19 +26,19 @@ def main():
         min_detection_confidence=min_detection_confidence,
         min_tracking_confidence=min_tracking_confidence,
     )
-
+# print(hands)
     mode = 1
     number = -1
     while True:
         key = cv.waitKey(10)
         if key == 27:  # ESC
             break
-        
+    #      if key == ord(' '):    
         if 48 <= key <= 57:  # 0 ~ 9
             number = key - 48
-            
+     #       print(number)       
         ret, image = cap.read()
-
+#      print(ret,image)
         if not ret:
             break
         image = cv.flip(image, 1)
@@ -49,7 +50,7 @@ def main():
         # cv.imshow("results",results)
         # print(type(results))
         # print(results)
-
+#      print(results.multi_hand_landmarks)
         if results.multi_hand_landmarks is not None:
             for hand_landmarks in results.multi_hand_landmarks :                               
                 landmark_list = calc_landmark_list(debug_image, hand_landmarks)
@@ -60,10 +61,10 @@ def main():
                 info_text="Press key 0-9"
                 cv.putText(debug_image, info_text, (10, 60), cv.FONT_HERSHEY_SIMPLEX, 1.0, (196, 161, 33), 1, cv.LINE_AA)
                 cv.imshow('Dataset Preparation', debug_image)
-
+#      print(results.multi_hand_landmarks)
     cap.release()
     cv.destroyAllWindows()
-
+# print(results.multi_hand_landmarks)
 if __name__ == '__main__':
     main()
 

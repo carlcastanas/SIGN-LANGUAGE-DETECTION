@@ -5,7 +5,7 @@ import mediapipe as mp
 from model import KeyPointClassifier
 from app_files import calc_landmark_list, draw_info_text, draw_landmarks, get_args, pre_process_landmark
 
-
+# Initialize the MediaPipe graph.
 def main():
     args = get_args()
 
@@ -28,20 +28,20 @@ def main():
         min_detection_confidence=min_detection_confidence,
         min_tracking_confidence=min_tracking_confidence,
     )
-
+ 
     keypoint_classifier = KeyPointClassifier()
-
+#   keypoint_classifier.load_model()
     with open('model/keypoint_classifier/keypoint_classifier_label.csv', encoding='utf-8-sig') as f:
         keypoint_classifier_labels = csv.reader(f)
         keypoint_classifier_labels = [
             row[0] for row in keypoint_classifier_labels
         ]
-
+#  print(keypoint_classifier_labels)
     while True:
         key = cv.waitKey(10)
         if key == 27:  # ESC
             break
-
+#       if key == ord(' '):
         ret, image = cap.read()
         if not ret:
             break
@@ -50,11 +50,11 @@ def main():
         # print(debug_image.shape)
         # cv.imshow("debug_image",debug_image)
         image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
-
+#      image = cv.resize(image, (640, 480))
         image.flags.writeable = False
         results = hands.process(image)
         image.flags.writeable = True
-
+#     print(results)
         if results.multi_hand_landmarks is not None:
             for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
                 landmark_list = calc_landmark_list(debug_image, hand_landmarks)
@@ -68,12 +68,12 @@ def main():
                     debug_image,
                     handedness,
                     keypoint_classifier_labels[hand_sign_id])
-
+#    cv.imshow("debug_image",debug_image)
         cv.imshow('Hand Gesture Recognition', debug_image)
-
+#    cv.waitKey(0)
     cap.release()
     cv.destroyAllWindows()
 
-
+# Run the main function.
 if __name__ == '__main__':
     main()

@@ -1,8 +1,8 @@
 import cv2 as cv
-
+# def draw_landmarks(image, landmark_list):
 def draw_landmarks(image, landmark_point):
     if len(landmark_point) > 0:
-        
+        # print(landmark_point)
         cv.line(image, tuple(landmark_point[2]), tuple(landmark_point[3]),
                 (0, 0, 0), 6)
         cv.line(image, tuple(landmark_point[2]), tuple(landmark_point[3]),
